@@ -1,0 +1,575 @@
+---
+title: "Chemistry Statistics"
+author: "Lee Kennedy"
+date: "20 April 2016"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introduction
+
+1. There is nothing here to scare you. 
+2. Statistics are only a way of describing the properties of data.
+
+## Assumptions
+
+1. The data is normally distributed.
+2. Never assume. Check.
+
+Normality can be assessed with:
+
+* Histograms (a density curve is also useful)
+* Boxplots
+* Normal probability plots (Q-Q)
+* Skewness
+* Kurtosis
+
+# Basic Statistical Methods and Ideas
+## Data
+
+Most collections of data follow a Gaussian distribution.  Commonly known as a ‘Bell’ curve or a ‘’Normal’ curve.
+
+Some data, notably microbiological data, does not follow the Gaussian distribution.  In order to make it do so, you must transform the data by techniques such using logarithms.
+
+## Descriptive Statistics
+Using Excel’s descriptive statistics function you can get an indication of a dataset’s ‘normality’.
+Similarly, in R, you can do a summary in base R or use "describe" in the Psych package.
+A quick check for normality may be just comparing the mean and median.  They should be relatively close.
+
+```{r, echo=FALSE}
+library(psych)
+data.in <- read.csv("/Users/Study Old/Documents/GitHub/Chemistry_Stats/data/Book1.csv", header=TRUE)
+
+```
+```{r}
+summary(data.in)
+describe(data.in)
+```
+
+### Q-Q Plot
+
+A Q-Q plot gives an indication of normality.  The previous data is assessed in the following plots.  If normally distributed, the data will lie near the red line.  The first set is normal, the second is not.  The histograms provide a more visual perspective.
+
+```{r, echo = FALSE}
+par(mfrow = c(2,2))
+
+qqnorm(data.in$A)
+qqline(data.in$A, col = 2)
+
+hist(data.in$A,
+     breaks = 10)
+
+qqnorm(data.in$B)
+qqline(data.in$B, col = 2)
+
+hist(data.in$B,
+     breaks = 10)
+```
+
+```{r, echo=FALSE}
+
+par(mfrow=c(1,1))
+
+```
+
+### Skewness
+
+Skewness quantifies how symmetrical the distribution is. 
+
+* A symmetrical distribution has a skewness of zero.
+* An asymmetrical distribution with a long tail to the right (higher values) has a positive skew.
+* An asymmetrical distribution with a long tail to the left (lower values) has a negative skew.
+
+### Kurtosis
+
+Kurtosis characterizes the relative peakedness or flatness of a distribution compared with the normal distribution. 
+
+* Different to Excel, which sets a normal curve to a kurtosis of 3.
+* A result less than 0 indicates a curve flatter than a normal distribution.
+* A result greater than 0 indicates a curve sharper than a normal distribution.
+
+### Data Assessment using dts.quality
+
+Item  |  Input
+------|---------
+R Script | data_review.R
+Input    | Data file, single column
+
+### Transformations
+
+If a distribution is not assessed as normal it may be possible to transform the data to a normal set by, for example, converting by logorithms.
+
+
+## Standard Deviation
+
+The standard deviation is just a way of describing the spread of the curve.  The spread is described by the variance.  The standard deviation is the square root of the variance, which means that it has the same units as the mean.
+
+A small standard deviation means a narrow shaped ‘bell’, a large standard deviation means a low flat ‘bell’.
+
+![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/normal.png)
+
+Standard Deviation shows how much variation there is from the "average" (mean). It may be thought of as the average difference of the scores from the mean of distribution, how far they are away from the mean. 
+
+A low standard deviation indicates that the data points tend to be very close to the mean, whereas high standard deviation indicates that the data are spread out over a large range of values.
+
+### Properties of standard deviations
+
+For constant c and random variables X and Y:
+ 
+ $$sd\left(X + c\right) = sd\left(X\right)$$
+ 
+ $$sd\left(c*X\right) = |c|*sd\left(X\right)$$
+ 
+ $$sd\left(X+Y\right) = \sqrt(var\left(X\right) +var\left(Y\right) + 2*cov\left(X,Y\right))$$
+
+ where var() and cov() stand for variance and covariance, respectively.
+
+NOTE: Usually, covariance is not an issue for chemists as the variables are usually independent.   Usually.   An example where they are not is in the calculation of the MU of Energy.  The value for carbohydrate is not independent of the values for fat and protein and allowance must be made for covariance.  This is done most easily by using the Monte Carlo method.
+
+
+$$\left(A \pm a \right) + \left(B \pm b \right)= \left(C \pm c \right)$$
+$$A + B = C$$  and $$c = \sqrt( a^2 + b^2 )$$
+
+For a complex product (and division) equation:
+
+
+$$\frac{\left(A \pm a\right) * \left(B \pm b\right)}{\left(C \pm c\right)} = \left(D \pm d \right)$$
+
+$$ D = \frac{A*B}{C}$$
+$$d = D * \sqrt(\left(\frac{a}{A}\right)^2 + \left(\frac{b}{B}\right)^2 + \left(\frac{c}{C}\right)^2)$$
+
+### z score
+A z-score is a normalised standard deviation where the mean is zero and the standard deviation is 1.  This permits the comparison of distributions by reducing them all back to a common metric.
+
+
+$$z = \frac{\left(result - mean\right)}{sd}$$
+
+
+### Pooled Standard Deviation
+Pooled standard deviation is the square-root of the pooled variance.
+
+The reason for pooled standard deviation is that you may sometimes have a number of small equivalent trials and a combined standard deviation will give a more robust value than any of the single, small population, estimates.
+
+Pooled variance is calculated by
+
+$$s_p^2 = \frac{\sum_{i=1}^{k} \left( n_1-1 \right)s_i^2}{\sum_{i=1}^{k} \left( n_1-1 \right)}$$
+
+or with simpler notation,
+
+$$s_p^2 = \frac{\left(n_1-1 \right)s_1^2 + \left(n_2-1 \right)s_2^2 + ... + \left(n_k-1 \right)s_k^2}{ n_1+n_2+...+n_k-k}$$
+
+
+where sp^2^ is the pooled variance and k is the number of samples being combined. n − 1 is used instead of n for the same reason it may be used in estimating variances from samples (i.e. Bessel's correction).
+
+### Standard error of the mean
+
+The standard error of the mean (SEM) is the standard deviation of the sample-mean's estimate of a population mean. 
+
+SEM is usually estimated by the sample estimate of the population standard deviation (sample standard deviation) divided by the square root of the sample size (assuming statistical independence of the values in the sample):
+
+$$ SEM = \frac{sd}{\sqrt(n)}$$
+ 
+where
+
+sd 	= 	the sample standard deviation (i.e., the sample-based estimate of the 
+		standard deviation of the population), and 
+
+n       = 	the size (number of observations) of the sample.
+
+Consequently, the SEM is always smaller than the sample standard deviation and this is why an average is always a better estimate than a single test.
+
+
+### Determining Standard Deviation in the Laboratory.
+
+Where a sample is tested multiple times, such as a control sample, the standard deviation is easily determined by the normal equation or by the function STDEV(range) in Excel.
+
+If you do not have access to multiple testing of a single sample, the standard deviation can be estimated from the difference of a series of duplicates.
+
+Note: The data  needs to be of comparable matrices and comparable levels of analyte.
+
+$$ sd = \sqrt(\frac{\left(x_1-x_2 \right)^2}{2n})$$
+
+where x1 and x2 are the duplicates and n is the number of duplicate pairs.
+
+Repeatability standard deviation is determined from duplicates and reproducibility standard deviation is determined from retests.
+
+### Effect Size
+Calculate the effect size by subtracting the control group mean from the final group mean and dividing the result by the standard deviation of the control group.  (Sometimes an arithmetic mean of the two sd’s is used.)  The greater the effect, the greater the impact of the ‘treatment’.  A result near zero indicates no effect.
+
+## Hypothesis Testing
+
+Hypothesis testing centers on the null hypothesis, Ho, that there has been no effect from the test or tests.
+
+### Type I and Type II errors
+
+Type I error: the null hypothesis is rejected, even though it is true.
+
+Type II error: a null hypothesis is accepted, even though it is false.
+
+### Confidence Intervals
+
+The most common metric for the significance of a statistical test is the p-value.  Of equal importance, some say more importance, is to determine the confidence intervals around a result.
+
+
+### Duplicate Repeatability
+
+Repeatability, in the laboratory sense, is how close you expect two duplicate  results to be.  Same sample, tested in duplicate, together.
+
+$$r = 2*\sqrt(2)*s_r$$
+
+where sr = standard deviation for repeatability duplicates.
+
+### Interim Precision
+
+Interim Precision means reproducibility, in the laboratory sense, and  is how close you expect two replicate results to be.  Same sample, different batches (and possibly days, analysts and instruments.
+
+
+$$R = 2*\sqrt(2)*s_R$$
+
+where sR = standard deviation for replicates.
+
+True reproducibility is a sign of the variance that can be expected between laboratories and is reflected in proficiency programs.
+
+Reproducibility > Interim Precision > Repeatability.
+
+The following table (From ISO 5725-6) gives the expected ranges associated with multiple testing of samples:
+
+![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/Critical_ranges.png)
+
+### Horwitz’s Trumpet
+Dr William Horwitz looked at the relative standard deviation for several thousand proficiency programs and found that there was a relationship between the level of analyte being determined and the relative standard deviation of the results of the participating laboratories.  He could then predict the RSD of another progam.
+
+$$Predicted RSD = 2*c^\left(-0.1505 \right)$$
+
+where c is the concentration of analyte, expressed in g/g. (eg 1 mg/kg = 0.000001g/g)
+
+A Horrat Value is the ratio of a proficiency program’s RSD to Horwitz’s predicted value.
+
+![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/horwitz.png)
+
+### Robust Statistics
+
+Robust statistics are not influenced markedly by outliers or extreme results.  For example the median will remain unchanged if one result is extreme where the mean can be dramatically affected.
+
+Proficiency programs, such as Global Proficiency, use robust statistics because the participation group is often so small.
+
+![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/robust.png)
+
+
+### Outliers
+
+Outliers can be identified using Grubb's estimates but I prefer to use robust filtering using IQRs to omit outlying points.
+## Robust Statistics
+### IQR etc
+
+
+sd ~ 0.7413 x IQR
+
+where IQR is the interquartile range of the sample, is a consistent estimate of σ if the population is normally distributed. The interquartile range IQR is the difference of the 3rd quartile of the data and the 1st quartile of the data. The asymptotic relative efficiency (ARE) of this estimator with respect to the one from sample standard deviation is 0.37. Hence, for normal data, it is better to use the one from sample standard deviation; when data is with thicker tails, this estimator can be more efficient.
+
+### Robust z score
+
+Robust z=  (Result-Median)/(0.7413×IQR)
+
+
+
+### Standard Difference
+
+Std Diff=  (Result-Median)/Limit
+
+Conceptually, a standard difference is similar to a z-score.
+
+The value for the limit is an agreed value for the test.  It is, in effect, a pooled standard deviation for the test and most useful when only a few laboratories are participating in a program.
+
+
+### Student's t Test
+
+#### Assumptions
+
+* Random sampling
+* Normality
+
+Types:
+
+* One sample t-test : is the mean of the sample different to a hypothesised mean?
+* Repeated measures t-Test : Test and retest.  Are the means of the two result sets different?
+* Independent groups t-Test : different participants have performed in each condition.
+
+$$t = \frac{\left(x - \bar{x}\right)}{\frac{sd}{\sqrt n}}$$
+
+The data:
+
+```{r, echo=FALSE}
+data.in <- read.csv("/Users/Study Old/Documents/GitHub/Chemistry_Stats/data/Book2.csv", header=TRUE)
+data.in <- data.in[1:6,]
+
+
+```
+
+```{r}
+
+t1 <- data.in$A
+t2 <- data.in$B
+
+boxplot(t1, t2)
+summary(data.in)
+
+t.test(t2, t1, paired = TRUE)
+```
+The p-value is (just) greater than 0.05 so we are not able to say that the two sets are different.  But it is borderline.
+
+Note the outlier (circle) in set 2.
+
+Conceptually, a t-test is identical to a signal to noise ratio.
+
+
+### F test
+
+The F-test is designed to test if two population variances are equal. It does this by comparing the ratio of two variances. So, if the variances are equal, the ratio of the variances will be 1.
+
+Assumptions / Notes
+* The larger variance should always be placed in the numerator 
+* The test statistic is F = s1^2 / s2^2 where s1^2 > s2^2 
+* Divide alpha by 2 for a two tail test and then find the right critical value 
+* If standard deviations are given instead of variances, they must be squared 
+* When the degrees of freedom aren't given in the table, go with the value with the larger critical value (this happens to be the smaller degrees of freedom). This is so that you are less likely to reject in error (type I error) 
+* The populations from which the samples were obtained must be normal. 
+* The samples must be independent
+
+
+### ANOVA
+If you need to compare more than one mean, you use ANOVA.
+
+Assumptions
+
+* Population normality
+* Homogeneity of variance (Consider Levene's Test)
+
+### Data Assessment using dts.quality
+
+Item  |  Input
+------|---------
+R Script | one.way.anova.R
+Input    | Data file, multiple labelled columns
+
+The 'ind' MS figure represents the between groups variance; the Residuals is the within groups.
+
+ANOVA permits the comparison of two or more groups to compare their means.  It will tell you that they are not all the same but will not tell you which one is different.
+
+Typical statement: "There were no statistically significant differences between group means as determined by one-way ANOVA (F(2,18) = 0.399, p = 0.677)"
+
+An estimate of repeatability standard deviation, sr, is obtained by the square root of the Within Groups Mean Square value. ( sqrt(0.0859)  = 0.293, a variance of 0.0864, cf the three individual variance results).
+
+An estimate of the between group standard deviation is given by
+
+$$s_b = \sqrt(\frac{MS_b-MS_w}{n})$$
+
+where n = the number of data points in a sets (=7 in the example).
+
+An estimate of the intermediate precision standard deviation is given by
+
+$$S_i = \sqrt(s_b^2 + s_r^2)$$
+
+If the between variance is smaller than the within variance, then the means are really close to each other.  When F<1 or F=1, between-group variance is smaller than within group variance, suggesting that the groups differ as much as one would expect due to sampling error.  If there is no effect due to the different groups, the two MS values should be the same.
+
+If differences across sample means are "large" relative to differences within samples, then we should reject the null hypothesis that the samples are all drawn from the same population.  If the relationship is the other way, differences within samples is greater than differences between samples, we cannot say the means are different.
+
+
+## Tukey HSD test
+
+The Tukey HSD test assesses the differences between data sets.  The ANOVA table has a p-value of 0.0106 indicating that the means are not all the same but it is Tukey who tells you which ones are different.  From the following table, only the A-B comparison is significant (p-value = 0.0062).
+
+```{r}
+
+TukeyHSD(anova_x)
+
+```
+
+
+An estimate of repeatability standard deviation, sr, is obtained by the square root of the Within Groups Mean Square value. ( sqrt(0.0859)  = 0.293, a variance of 0.0864, cf the three individual variance results).
+
+
+In the example data, the boxplot of the data shows that they are very similar:
+
+ 
+Rounding
+
+The correct level of rounding for an analysis is indicated by the standard deviation of that analysis (2). If need be you can round to a less accurate level that the level indicated by this rule but not to a higher level of accuracy unless it is at the client’s specific request (eg project work).
+
+Rounding Rule: A result should be rounded to the power of ten that is immediately less than half the standard deviation of that analysis.
+
+Example 1: If the sd of the analysis is 0.5, half the sd is 0.25 and the power of ten immediately less than this is 0.1 so the results should be rounded to one decimal place.
+
+Example 2: If the sd of the analysis is 3, half the sd is 1.5 and the power of ten immediately less than this is 1 so the results should be rounded to the nearest whole figure.
+
+
+
+## Curve Fitting and Least squares
+
+R2 is simply the square of the sample correlation coefficient between the outcomes and their predicted values, or in the case of simple linear regression, between the outcome and the values being used for prediction. In such cases, the values vary from 0 to 1. 
+
+### Bootstrapping
+
+Bootstrapping is where a small dataset is repeatedly resampled (with replacement) to produce a better estimate of the background distribution.
+
+Assumption: the small set contains values that are all equally valid.
+
+```{r, echo=FALSE}
+data.in <- read.csv("/Users/Study Old/Documents/GitHub/Chemistry_Stats/data/Book1.csv", header=TRUE)
+
+bucket <- rep(NA,10000)
+n <- nrow(data.in)
+
+for(i in 1:10000){
+  samp = sample(data.in$A, n, replace=TRUE)
+  bucket[i] = mean(samp)
+}
+par(mfrow = c(1,2))
+hist(data.in$A, breaks = 20, main = "Sample Set", xlab="value")
+hist(bucket, breaks = 20, main = "Distribution estimate", xlab="value")
+
+```
+
+## Monte Carlo Estimates
+
+A monte Carlo esitmate lets you estimate hard to calculate values.  An example is the MU of Energy in a Nutrition Panel, where the value depends on Fat, Protein and Carbohydrate but Carbohydrate also depends on fat and protein.  There is covariance that must be calculated.  
+
+-------
+
+# Laboratory Statistics
+
+## Data Exploration Guidelines
+
+1. Know what you are trying to prove. Correlation?  Differences?
+2. Determine what data you need to collect.
+3. Always plot your data.  Sometimes that is all you need to do for the answer to your question to be obvious.
+* Regular plots
+* X-Y plots
+* Box Plots
+
+Once you have had a look at your data, decide whether it is complete and whether it needs to be ‘cleaned’.  
+
+Incomplete data may have areas where your feel that more data is needed to present a complete picture.
+
+Cleaning data is not a bad thing and can involve removing blanks, removing ‘less thans’ (<), and removing obvious outliers.
+
+Is your data normally distributed?  Do you need to transform it to a format that is normally distributed?  Check skewness and kurtosis.
+
+Are there trends?  Trending data can sometimes be normalised by plotting the point to point changes.
+
+## Tidy Data - Presenting Data for statistical analysis
+1.	Each variable you measure should be in one column
+2.	Each different observation of that variable should be in a different row
+3.	There should be one table for each "kind" of variable
+4.	If you have multiple tables, they should include a column in the table that allows them to be linked.
+
+## Proficiency programs
+
+###En-Score
+
+$$En = \frac{\left(V_{lab}-V_{Ref} \right)}{\sqrt(U_{Lab}^2 + U_{Ref}^2 )}$$
+
+where
+
+
+## Control charts
+
+Control Charts, as the name suggests, help determine whether a process is under control.
+
+Conceptually, they are a 3-D Normal curve.  The majority of points should fall in the middle, evenly across both sides of the middle, with no trending.
+
+![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/cc.png)
+
+### Trending rules
+
+
+## Two IRM/SRMs in a batch
+
+Criteria      |    	Response       |	Rationale
+--------------|------------------------|--------------
+Both IRMs within the ±2sd range.|System in control|no action	
+One IRM outside the ±2sd range, one within the ±2sd range |	No action but monitor. |	There is a 5% chance that this will happen randomly.
+Both IRMs outside the ±2sd range. |	Action required. |	There is only a 0.25% chance of this happening randomly.
+Either IRM is outside the 3sd range. |	Action required. |	There is only a 1% chance of this happening randomly.
+
+Note: the IRMs should not be run sequentially.  With things like fat and ash it is not a big issue as the samples are all, in effect, tested separately but, in an instrumental batch, it is preferable that the IRMs are at each end of the batch.
+
+## Interpreting GP reports
+
+## Validation of methods
+
+###  Standards curves
+
+A standard curve is an X-Y curve and is a form of correlation.
+
+There are a number of assumptions:
+
+* Data is in pairs
+* Data is normal
+* The relationship is linear
+* Homoscedacity - constant variance over the range.
+
+### Data Assessment using dts.quality
+
+Item  |  Input
+------|---------
+R Script | X-Y.scatterplot.R
+Input    | Data file, two columns
+
+## MU
+
+Measurement Uncertainty is a value range around a laboratory result that the lab is 95% confident contains the true value.  It represents a plausible range of results around the nominal result.
+
+### Precision
+How close the laboratory results are to each other.
+
+### Bias
+How close the laboratory results are to a known value.
+
+### UoBias
+A function of the laboratory's precision and the uncertainty of the value for the standard or reference value.
+
+Even when no bias appears to exist in a sample, there will be uncertainty as to whether any bias exists. 
+
+The diagram below compares the laboratory value to the ‘Truth’.  The laboratory value has the appropriate uncertainty spread around it, however in reality there is no absolute ‘Truth’.  Both the determined value and the certified “truth” value will have an uncertainty around them.
+
+
+
+## Expansion Coefficient
+
+Often 2 is used as a default value for k, the expansion coefficent.  While this is adequate for large sample populations (>30), the true value should be used for small sample sizes.
+
+
+```{r, echo = FALSE}
+# n sample points
+n <- 10 
+
+# p = desired probability
+p <- 0.95
+
+# Expansion Co-efficient
+cat("Expansion Co-efficient (n=10, p=0.95) = ", round(abs(qt((1-p)/2, n-1)),2))
+
+```
+
+## TOST (Two One-Sided t-Tests)
+
+TOST tests assess whether there is a practical difference in means. You must pick a threshold difference for which smaller differences are considered practically equivalent. The most straightforward test to construct uses two one-sided t-tests from both sides of the difference interval. If both tests reject (or conclude that the difference in the means differs significantly from the threshold), then the groups are practically equivalent. 
+
+
+## Excel Hints & Tips
+
+To generate random but normally distributed numbers use:
+=NORMINV(RAND(), mean, standard_dev)
+
