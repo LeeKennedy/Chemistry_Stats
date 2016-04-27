@@ -2,6 +2,9 @@ library(psych)
 
 # Enter data and selct single column.
 data.in <- read.csv("/Users/Study Old/Documents/GitHub/Chemistry_Stats/data/Book1.csv", header=TRUE)
+
+#data.in <- read.csv("C:/Users/lkennedy/OneDrive for Business 1/GitHub Projects/Chemistry_Stats/data/Book1.csv", header=TRUE)
+
 data.in2 <- data.in[2]
 
 
