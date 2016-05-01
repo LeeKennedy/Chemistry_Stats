@@ -1,15 +1,15 @@
 ---
 title: "Chemistry Statistics"
 author: "Lee Kennedy"
-date: "20 April 2016"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
+  word_document:
+    toc: yes
+    toc_depth: '3'
   html_document:
     toc: yes
     toc_depth: 3
     toc_float: yes
-  word_document:
-    toc: yes
-    toc_depth: '3'
 ---
 
 ```{r setup, include=FALSE}
@@ -35,17 +35,19 @@ Normality can be assessed with:
 * Skewness
 * Kurtosis
 
-# Basic Statistical Methods and Ideas
+# Part A : Basic Statistical Methods and Ideas
 ## Data
 
-Most collections of data follow a Gaussian distribution.  Commonly known as a ‘Bell’ curve or a ‘’Normal’ curve.
+Most collections of data follow a Gaussian distribution.  Commonly known as a ‘Bell’ curve or a ‘Normal’ curve.
 
 Some data, notably microbiological data, does not follow the Gaussian distribution.  In order to make it do so, you must transform the data by techniques such using logarithms.
 
-## Descriptive Statistics
-Using Excel’s descriptive statistics function you can get an indication of a dataset’s ‘normality’.
-Similarly, in R, you can do a summary in base R or use "describe" in the Psych package.
+### Descriptive Statistics
+Descriptive statistics permit you to get an indication of a dataset’s ‘normality’.
+You can do a summary in base R or use "describe" in the Psych package.
 A quick check for normality may be just comparing the mean and median.  They should be relatively close.
+
+The following two data sets are displayed using the two processes.  A shows good normality but B doesn't.  This can be seen in the ranges and the difference between the mean and the median.  Note also what happens to the means when the top and bottom 10% of data points are removed ("trimmed").  
 
 ```{r, echo=FALSE}
 library(psych)
@@ -88,8 +90,8 @@ par(mfrow=c(1,1))
 Skewness quantifies how symmetrical the distribution is. 
 
 * A symmetrical distribution has a skewness of zero.
-* An asymmetrical distribution with a long tail to the right (higher values) has a positive skew.
-* An asymmetrical distribution with a long tail to the left (lower values) has a negative skew.
+* An asymmetrical distribution with a long tail to the right (more higher values) has a positive skew.
+* An asymmetrical distribution with a long tail to the left (more lower values) has a negative skew.
 
 ### Kurtosis
 
@@ -99,27 +101,28 @@ Kurtosis characterizes the relative peakedness or flatness of a distribution com
 * A result less than 0 indicates a curve flatter than a normal distribution.
 * A result greater than 0 indicates a curve sharper than a normal distribution.
 
-### Data Assessment using dts.quality
-
-Item  |  Input
-------|---------
-R Script | data_review.R
-Input    | Data file, single column
 
 ### Transformations
 
 If a distribution is not assessed as normal it may be possible to transform the data to a normal set by, for example, converting by logorithms.
 
 
+---
+
+#### Data Assessment using the 'dts.quality' package
+
+Item  |  Input
+------|---------
+R Script | data_review.R
+Input    | Data file, single column
+
+---
+
 ## Standard Deviation
 
-The standard deviation is just a way of describing the spread of the curve.  The spread is described by the variance.  The standard deviation is the square root of the variance, which means that it has the same units as the mean.
-
-A small standard deviation means a narrow shaped ‘bell’, a large standard deviation means a low flat ‘bell’.
+The standard deviation is just a way of describing the spread of data in the normal curve.  
 
 ![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/normal.png)
-
-Standard Deviation shows how much variation there is from the "average" (mean). It may be thought of as the average difference of the scores from the mean of distribution, how far they are away from the mean. 
 
 A low standard deviation indicates that the data points tend to be very close to the mean, whereas high standard deviation indicates that the data are spread out over a large range of values.
 
@@ -135,14 +138,17 @@ For constant c and random variables X and Y:
 
  where var() and cov() stand for variance and covariance, respectively.
 
-NOTE: Usually, covariance is not an issue for chemists as the variables are usually independent.   Usually.   An example where they are not is in the calculation of the MU of Energy.  The value for carbohydrate is not independent of the values for fat and protein and allowance must be made for covariance.  This is done most easily by using the Monte Carlo method.
+>NOTE: Usually, covariance is not an issue for chemists as the variables are usually independent.   Usually.   An example where they are not is in the calculation of the MU of Energy.  The value for carbohydrate is not independent of the values for fat and protein and allowance must be made for covariance.  This is done most easily by using the Monte Carlo method. (See later)
 
+For addition and subtraction, where
 
 $$\left(A \pm a \right) + \left(B \pm b \right)= \left(C \pm c \right)$$
+
+The sombined standard deviation is:
+
 $$A + B = C$$  and $$c = \sqrt( a^2 + b^2 )$$
 
 For a complex product (and division) equation:
-
 
 $$\frac{\left(A \pm a\right) * \left(B \pm b\right)}{\left(C \pm c\right)} = \left(D \pm d \right)$$
 
@@ -170,7 +176,8 @@ or with simpler notation,
 $$s_p^2 = \frac{\left(n_1-1 \right)s_1^2 + \left(n_2-1 \right)s_2^2 + ... + \left(n_k-1 \right)s_k^2}{ n_1+n_2+...+n_k-k}$$
 
 
-where sp^2^ is the pooled variance and k is the number of samples being combined. n − 1 is used instead of n for the same reason it may be used in estimating variances from samples (i.e. Bessel's correction).
+where sp^2^ is the pooled variance and k is the number of samples being combined. 
+
 
 ### Standard error of the mean
 
@@ -219,7 +226,7 @@ Type II error: a null hypothesis is accepted, even though it is false.
 
 ### Confidence Intervals
 
-The most common metric for the significance of a statistical test is the p-value.  Of equal importance, some say more importance, is to determine the confidence intervals around a result.
+The most common metric for the significance of a statistical test (and hence whether a hypothesis is true or not) is the p-value.  Of equal importance, some say more importance, is to determine the confidence intervals around a result.
 
 
 ### Duplicate Repeatability
@@ -258,6 +265,17 @@ A Horrat Value is the ratio of a proficiency program’s RSD to Horwitz’s pred
 
 ![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/horwitz.png)
 
+---
+
+#### Data Assessment using the 'dts.quality' package
+
+Item  |  Input
+------|---------
+R Script | horwitz.R
+Input    | xxx
+
+---
+
 ### Robust Statistics
 
 Robust statistics are not influenced markedly by outliers or extreme results.  For example the median will remain unchanged if one result is extreme where the mean can be dramatically affected.
@@ -270,28 +288,28 @@ Proficiency programs, such as Global Proficiency, use robust statistics because 
 ### Outliers
 
 Outliers can be identified using Grubb's estimates but I prefer to use robust filtering using IQRs to omit outlying points.
+
 ## Robust Statistics
+
 ### IQR etc
 
+The relationship between a regular standard deviation and a robust standard deviation is:
 
-sd ~ 0.7413 x IQR
+$$sd \approx 0.7413*IQR$$
 
-where IQR is the interquartile range of the sample, is a consistent estimate of σ if the population is normally distributed. The interquartile range IQR is the difference of the 3rd quartile of the data and the 1st quartile of the data. The asymptotic relative efficiency (ARE) of this estimator with respect to the one from sample standard deviation is 0.37. Hence, for normal data, it is better to use the one from sample standard deviation; when data is with thicker tails, this estimator can be more efficient.
+where IQR is the interquartile range of the sample, is a consistent estimate of σ if the population is normally distributed. The interquartile range IQR is the difference of the 3rd quartile of the data and the 1st quartile of the data. 
 
 ### Robust z score
 
-Robust z=  (Result-Median)/(0.7413×IQR)
-
-
+$$ Robust_z =  \frac{\left(Result-Median\right)}{0.7413*IQR}$$
 
 ### Standard Difference
 
-Std Diff=  (Result-Median)/Limit
+$$Std_Diff=  \frac{\left(Result-Median \right)}{Limit}$$
 
 Conceptually, a standard difference is similar to a z-score.
 
 The value for the limit is an agreed value for the test.  It is, in effect, a pooled standard deviation for the test and most useful when only a few laboratories are participating in a program.
-
 
 ### Student's t Test
 
@@ -333,6 +351,16 @@ Note the outlier (circle) in set 2.
 
 Conceptually, a t-test is identical to a signal to noise ratio.
 
+---
+
+#### Data Assessment using the 'dts.quality' package
+
+Item  |  Input
+------|---------
+R Script | t.tests.R
+Input    | xxx
+
+---
 
 ### F test
 
@@ -356,18 +384,22 @@ Assumptions
 * Population normality
 * Homogeneity of variance (Consider Levene's Test)
 
-### Data Assessment using dts.quality
+---
+
+#### Data Assessment using the 'dts.quality' package
 
 Item  |  Input
 ------|---------
 R Script | one.way.anova.R
 Input    | Data file, multiple labelled columns
 
+---
+
 The 'ind' MS figure represents the between groups variance; the Residuals is the within groups.
 
 ANOVA permits the comparison of two or more groups to compare their means.  It will tell you that they are not all the same but will not tell you which one is different.
 
-Typical statement: "There were no statistically significant differences between group means as determined by one-way ANOVA (F(2,18) = 0.399, p = 0.677)"
+The wording of a typical statement: "There were no statistically significant differences between group means as determined by one-way ANOVA (F(2,18) = 0.399, p = 0.677)"
 
 An estimate of repeatability standard deviation, sr, is obtained by the square root of the Within Groups Mean Square value. ( sqrt(0.0859)  = 0.293, a variance of 0.0864, cf the three individual variance results).
 
@@ -388,22 +420,16 @@ If differences across sample means are "large" relative to differences within sa
 
 ## Tukey HSD test
 
-The Tukey HSD test assesses the differences between data sets.  The ANOVA table has a p-value of 0.0106 indicating that the means are not all the same but it is Tukey who tells you which ones are different.  From the following table, only the A-B comparison is significant (p-value = 0.0062).
-
-```{r}
-
-TukeyHSD(anova_x)
-
-```
+The Tukey HSD test assesses the differences between data sets.  The ANOVA table has a p-value of 0.0106 indicating that the means are not all the same but it is Tukey who tells you which ones are different.  
 
 
 An estimate of repeatability standard deviation, sr, is obtained by the square root of the Within Groups Mean Square value. ( sqrt(0.0859)  = 0.293, a variance of 0.0864, cf the three individual variance results).
 
 
-In the example data, the boxplot of the data shows that they are very similar:
+
 
  
-Rounding
+## Rounding
 
 The correct level of rounding for an analysis is indicated by the standard deviation of that analysis (2). If need be you can round to a less accurate level that the level indicated by this rule but not to a higher level of accuracy unless it is at the client’s specific request (eg project work).
 
@@ -418,6 +444,18 @@ Example 2: If the sd of the analysis is 3, half the sd is 1.5 and the power of t
 ## Curve Fitting and Least squares
 
 R2 is simply the square of the sample correlation coefficient between the outcomes and their predicted values, or in the case of simple linear regression, between the outcome and the values being used for prediction. In such cases, the values vary from 0 to 1. 
+
+
+---
+
+#### Data Assessment using the 'dts.quality' package
+
+Item  |  Input
+------|---------
+R Script | X-Y.scatterplot.R
+Input    | Data file, Two labelled columns
+
+---
 
 ### Bootstrapping
 
@@ -441,13 +479,33 @@ hist(bucket, breaks = 20, main = "Distribution estimate", xlab="value")
 
 ```
 
+---
+
+#### Data Assessment using the 'dts.quality' package
+
+Item  |  Input
+------|---------
+R Script | xxx.R
+Input    | Data file, single labelled column
+
+---
+
 ## Monte Carlo Estimates
 
-A monte Carlo esitmate lets you estimate hard to calculate values.  An example is the MU of Energy in a Nutrition Panel, where the value depends on Fat, Protein and Carbohydrate but Carbohydrate also depends on fat and protein.  There is covariance that must be calculated.  
+A Monte Carlo esitmate lets you estimate hard to calculate values.  An example is the MU of Energy in a Nutrition Panel, where the value depends on Fat, Protein and Carbohydrate but Carbohydrate also depends on fat and protein.  There is covariance that must be calculated.  
 
--------
+---
 
-# Laboratory Statistics
+#### Data Assessment using the 'dts.quality' package
+
+Item  |  Input
+------|---------
+R Script | xxx.R
+Input    | xxx
+
+---
+
+# Part B : Laboratory Statistics
 
 ## Data Exploration Guidelines
 
@@ -462,13 +520,20 @@ Once you have had a look at your data, decide whether it is complete and whether
 
 Incomplete data may have areas where your feel that more data is needed to present a complete picture.
 
-Cleaning data is not a bad thing and can involve removing blanks, removing ‘less thans’ (<), and removing obvious outliers.
+Cleaning data is not a bad thing and can involve 
+* removing blanks, 
+* removing ‘less thans’ (<), 
+* removing text and 
+* removing obvious outliers.
 
 Is your data normally distributed?  Do you need to transform it to a format that is normally distributed?  Check skewness and kurtosis.
 
 Are there trends?  Trending data can sometimes be normalised by plotting the point to point changes.
 
 ## Tidy Data - Presenting Data for statistical analysis
+
+Tidy Data is easy to work with.
+
 1.	Each variable you measure should be in one column
 2.	Each different observation of that variable should be in a different row
 3.	There should be one table for each "kind" of variable
@@ -509,6 +574,18 @@ Note: the IRMs should not be run sequentially.  With things like fat and ash it 
 
 ## Validation of methods
 
+A typical validation project will consider the following items.  Whether they are done will vary, case by case.
+
+* Linearity
+* LOD/LOR
+* Matrix Effects
+* Sensitivity
+* Selectivity
+* Precision
+* Bias
+* Ruggedness (~)
+* MU
+
 ###  Standards curves
 
 A standard curve is an X-Y curve and is a form of correlation.
@@ -520,12 +597,15 @@ There are a number of assumptions:
 * The relationship is linear
 * Homoscedacity - constant variance over the range.
 
-### Data Assessment using dts.quality
+---
 
+#### Data Assessment using the 'dts.quality' package
 Item  |  Input
 ------|---------
 R Script | X-Y.scatterplot.R
 Input    | Data file, two columns
+
+---
 
 ## MU
 
@@ -567,9 +647,14 @@ cat("Expansion Co-efficient (n=10, p=0.95) = ", round(abs(qt((1-p)/2, n-1)),2))
 
 TOST tests assess whether there is a practical difference in means. You must pick a threshold difference for which smaller differences are considered practically equivalent. The most straightforward test to construct uses two one-sided t-tests from both sides of the difference interval. If both tests reject (or conclude that the difference in the means differs significantly from the threshold), then the groups are practically equivalent. 
 
+---
 
-## Excel Hints & Tips
+#### Data Assessment using the 'dts.quality' package
+Item  |  Input
+------|---------
+R Script | xxx.R
+Input    | xxx
 
-To generate random but normally distributed numbers use:
-=NORMINV(RAND(), mean, standard_dev)
+---
+
 
