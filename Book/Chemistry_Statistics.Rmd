@@ -1,15 +1,15 @@
 ---
 title: "Chemistry Statistics"
 author: "Lee Kennedy"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: 
 output:
-  word_document:
-    toc: yes
-    toc_depth: '3'
   html_document:
     toc: yes
     toc_depth: 3
     toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: '3'
 ---
 
 ```{r setup, include=FALSE}
@@ -144,9 +144,13 @@ For addition and subtraction, where
 
 $$\left(A \pm a \right) + \left(B \pm b \right)= \left(C \pm c \right)$$
 
-The sombined standard deviation is:
+For the compound result:
 
-$$A + B = C$$  and $$c = \sqrt( a^2 + b^2 )$$
+$$A + B = C$$   
+
+the combined standard deviation is:
+
+$$c = \sqrt( a^2 + b^2 )$$
 
 For a complex product (and division) equation:
 
@@ -433,11 +437,11 @@ An estimate of repeatability standard deviation, sr, is obtained by the square r
 
 The correct level of rounding for an analysis is indicated by the standard deviation of that analysis (2). If need be you can round to a less accurate level that the level indicated by this rule but not to a higher level of accuracy unless it is at the client’s specific request (eg project work).
 
-Rounding Rule: A result should be rounded to the power of ten that is immediately less than half the standard deviation of that analysis.
+**Rounding Rule:** A result should be rounded to the power of ten that is immediately less than half the standard deviation of that analysis.
 
-Example 1: If the sd of the analysis is 0.5, half the sd is 0.25 and the power of ten immediately less than this is 0.1 so the results should be rounded to one decimal place.
+**Example 1:** If the sd of the analysis is 0.5, half the sd is 0.25 and the power of ten immediately less than this is 0.1 so the results should be rounded to one decimal place.
 
-Example 2: If the sd of the analysis is 3, half the sd is 1.5 and the power of ten immediately less than this is 1 so the results should be rounded to the nearest whole figure.
+**Example 2:** If the sd of the analysis is 3, half the sd is 1.5 and the power of ten immediately less than this is 1 so the results should be rounded to the nearest whole figure.
 
 
 
@@ -461,7 +465,7 @@ Input    | Data file, Two labelled columns
 
 Bootstrapping is where a small dataset is repeatedly resampled (with replacement) to produce a better estimate of the background distribution.
 
-Assumption: the small set contains values that are all equally valid.
+**Assumption:** the small set contains values that are all equally valid.
 
 ```{r, echo=FALSE}
 data.in <- read.csv("/Users/Study Old/Documents/GitHub/Chemistry_Stats/data/Book1.csv", header=TRUE)
@@ -558,6 +562,18 @@ Conceptually, they are a 3-D Normal curve.  The majority of points should fall i
 
 ### Trending rules
 
+Situation   |   Comment
+------------|-------------------------------
+One point outside 3sd (UCL, LCL) | Out of control
+Seven or more consecutive points on one side of the mean | Bias
+Six or more consecultive points trending up or down | Trending
+
+
+### Multiple Decision Points in a Control Chart
+
+Sometimes it is decided to use more than one limit in a control chart.  Be aware that this can result in needless retests.  Say you are looking at four criteria in your control chart, any one of which has a 5% chance of exceeding the 2sd control limit.  In parallel this way, there is a much larger chance of the batch failing.  The probability of atleast one criteria failing is:
+
+$$ 100*(1-\left(0.95\right)^4) = 18.6% chance of failure.$$
 
 ## Two IRM/SRMs in a batch
 
@@ -572,6 +588,20 @@ Note: the IRMs should not be run sequentially.  With things like fat and ash it 
 
 ## Interpreting GP reports
 
+* The Limit = 95% confidence level (2sd)
+* Outliers = 2 x limits = 4sd (so, seriously outlying).  Identified with hash mark.
+* Standardised Difference = (result -  median)/limit
+* Alert = Standard Difference >1 (>2sd)
+* Where two samples are tested, Bias = average of the two standard differences.
+* Bias alert when bias >0.5
+
+![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/GP_Flowchart.png)
+
+Note: GP 'alerts' are based on 95% statistics, so there is a 1/20 change of a random alert.
+* Check for transcription errors
+* Check for calculation errors
+* Ask for more sample and retest.
+
 ## Validation of methods
 
 A typical validation project will consider the following items.  Whether they are done will vary, case by case.
@@ -585,6 +615,14 @@ A typical validation project will consider the following items.  Whether they ar
 * Bias
 * Ruggedness (~)
 * MU
+
+### Linearity
+
+### Limit of Detection (LOD) & Limit of Reporting (LOR)
+
+![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/LOR.png)
+
+To assess LOD and LOR it is common to look at the standard deviation near the LOR.  The black curve, above, represents the standard deviation as it brackets the blank.  The red curve is centered 3sd and represents the point where the mean value idf clear of the blank variation but there is still an overlap between the blank and the detection curve.  You may have detected the analyte but quatitationis uncertain.  The blue curve, 10sd, is clear of the other curves and has a realistic likelyhood of quantitation.
 
 ###  Standards curves
 
@@ -618,6 +656,7 @@ How close the laboratory results are to each other.
 How close the laboratory results are to a known value.
 
 ### UoBias
+
 A function of the laboratory's precision and the uncertainty of the value for the standard or reference value.
 
 Even when no bias appears to exist in a sample, there will be uncertainty as to whether any bias exists. 
