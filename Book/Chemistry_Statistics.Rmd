@@ -1,7 +1,7 @@
 ---
 title: "Chemistry Statistics"
 author: "Lee Kennedy"
-date: 
+date: 'null'
 output:
   html_document:
     toc: yes
@@ -684,16 +684,26 @@ cat("Expansion Co-efficient (n=10, p=0.95) = ", round(abs(qt((1-p)/2, n-1)),2))
 
 ## TOST (Two One-Sided t-Tests)
 
-TOST tests assess whether there is a practical difference in means. You must pick a threshold difference for which smaller differences are considered practically equivalent. The most straightforward test to construct uses two one-sided t-tests from both sides of the difference interval. If both tests reject (or conclude that the difference in the means differs significantly from the threshold), then the groups are practically equivalent. 
+### Issues with normal t test
+With a normal t test, if the p-value is less than alpha, you conclude that the means significantly differ. But if the p-value is not less than alpha, you haven’t proven that the means are equal. You just don’t have enough evidence to prove that they’re not equal.  The observed p-value can only be used as a measure of evidence against the null, not for it.
+
+TOST equivalence tests were specifically developed to address this issue. In a 2-sample equivalence test, the null and alternative hypotheses are reversed from a standard 2-sample t test:  the null hypothesis is that the means differ.  The alternative hypothesis is that they do not.
+
+TOST tests assess whether there is a practical difference in means. You must pick a threshold difference for which smaller differences are considered practically equivalent. The most straightforward test to construct uses two one-sided t-tests from both sides of the difference interval. If both tests reject (or conclude that the difference in the means differs significantly from the threshold), then the groups are not equivalent. 
+
+![If the difference between means
+falls in the blue range, we would 
+conclude the means belong to 
+equivalent groups.
+](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/TOST.png)
 
 ---
 
 #### Data Assessment using the 'dts.quality' package
 Item  |  Input
 ------|---------
-R Script | xxx.R
-Input    | xxx
+R Script | TOST.R
+Input    | Data set 1, Data set 2, epsilon
 
 ---
-
 

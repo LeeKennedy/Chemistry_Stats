@@ -7,7 +7,6 @@ data.in <- read.csv("/Users/Study Old/Documents/GitHub/Chemistry_Stats/data/Book
 
 data.in2 <- data.in[2]
 
-
 colnames(data.in2)[1] <- "Data"
 summary(data.in2)
 describe(data.in2)

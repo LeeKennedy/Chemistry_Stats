@@ -4,6 +4,8 @@ data.in <- read.spss("/Users/Study Old/Documents/GitHub/Chemistry_Stats/data/Wor
 
 # One sample t-Test
 #To test if there is a significant difference between the mean of WITHADD and a estimated mean of 10.5:
+# WITHADD = with fuel additive; WITHOUT = without fuel additive
+# CARTYPE = manual or automatic
         
 boxplot(data.in$WITHADD)
 abline(h=10.5, col="red", lty=2)
