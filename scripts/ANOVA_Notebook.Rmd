@@ -1,6 +1,8 @@
 ---
 title: "ANOVA"
-output: html_notebook
+output:
+  word_document: default
+  html_notebook: default
 ---
 
 ##Purpose##
