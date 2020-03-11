@@ -49,8 +49,8 @@ library(readr)
 ```
 
 ##Demonstration Data##
-```{r}
-cancer.survival <- read_csv("~/Desktop/R Holding/Statistics Notebooks/data/cancer-survival.csv")
+```{r, message=FALSE}
+cancer.survival <- read_csv("C:/Users/leekennedy/Documents/GitHub/Chemistry_Stats/data/cancer-survival.csv")
 ```
 
 ###Plot the data###
@@ -151,7 +151,7 @@ ANOVA looks at the differences between groups and within groups and so it can be
 ###Data###
 
 ```{r}
-val_data <- read_excel("~/Desktop/R Holding/Statistics Notebooks/data/Validation.xlsx")
+val_data <- read_excel("C:/Users/leekennedy/Documents/GitHub/Chemistry_Stats/data/Validation.xlsx")
 round(val_data,2)
 ```
 
@@ -180,7 +180,7 @@ with(val_data2, tapply(values, ind, shapiro.test))
 
 ###Levene's test for Variance###
 ```{r, warning=FALSE}
-levene.test(values~ind, data = val_data2)
+leveneTest(values~ind, data = val_data2)
 ```
 ###Interpretation###
 The variance is good as seen by both the boxplot and Levene's Test.
@@ -230,7 +230,7 @@ This example uses a moth trap experiment.  The dependent variable is the number 
 
 ### Data ###
 ```{r}
-moth.experiment <- read_csv("~/Desktop/R Holding/Statistics Notebooks/data/moth-trap-experiment.csv")
+moth.experiment <- read_csv("C:/Users/leekennedy/Documents/GitHub/Chemistry_Stats/data/moth-trap-experiment.csv")
 str(moth.experiment)
 ```
 
