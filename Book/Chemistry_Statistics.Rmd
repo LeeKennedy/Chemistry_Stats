@@ -3,19 +3,20 @@ title: "Chemistry Statistics"
 author: "Lee Kennedy"
 date: 'null'
 output:
+  word_document:
+    toc: yes
+    toc_depth: '3'
   html_document:
     toc: yes
     toc_depth: 3
     toc_float: yes
-  word_document:
-    toc: yes
-    toc_depth: '3'
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+\newpage
 
 # Introduction
 
@@ -25,15 +26,17 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Assumptions
 
 1. The data is normally distributed.
-2. Never assume. Check.
+2. But you should never assume. Check.
 
 Normality can be assessed with:
 
+* Descriptive Statistics
 * Histograms (a density curve is also useful)
 * Boxplots
 * Normal probability plots (Q-Q)
 * Skewness
 * Kurtosis
+* Shapiro-Wilk Test
 
 # Part A : Basic Statistical Methods and Ideas
 ## Data
@@ -42,7 +45,7 @@ Most collections of data follow a Gaussian distribution.  Commonly known as a �
 
 Some data, notably microbiological data, does not follow the Gaussian distribution.  In order to make it do so, you must transform the data by techniques such using logarithms.
 
-### Descriptive Statistics
+### Descriptive Statistics 
 Descriptive statistics permit you to get an indication of a dataset’s ‘normality’.
 You can do a summary in base R or use "describe" in the Psych package.
 A quick check for normality may be just comparing the mean and median.  They should be relatively close.
@@ -51,7 +54,7 @@ The following two data sets are displayed using the two processes.  A shows good
 
 ```{r, echo=FALSE}
 library(psych)
-data.in <- read.csv("/Users/Study Old/Documents/GitHub/Chemistry_Stats/data/Book1.csv", header=TRUE)
+data.in <- read.csv("/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/data/Book1.csv", header=TRUE)
 
 ```
 ```{r}
@@ -122,7 +125,7 @@ Input    | Data file, single column
 
 The standard deviation is just a way of describing the spread of data in the normal curve.  
 
-![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/normal.png)
+![Caption for the picture.](/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/figures/normal.png)
 
 A low standard deviation indicates that the data points tend to be very close to the mean, whereas high standard deviation indicates that the data are spread out over a large range of values.
 
@@ -256,7 +259,7 @@ Reproducibility > Interim Precision > Repeatability.
 
 The following table (From ISO 5725-6) gives the expected ranges associated with multiple testing of samples:
 
-![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/Critical_ranges.png)
+![Caption for the picture.](/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/figures/Critical_ranges.png)
 
 ### Horwitz’s Trumpet
 Dr William Horwitz looked at the relative standard deviation for several thousand proficiency programs and found that there was a relationship between the level of analyte being determined and the relative standard deviation of the results of the participating laboratories.  He could then predict the RSD of another progam.
@@ -267,7 +270,7 @@ where c is the concentration of analyte, expressed in g/g. (eg 1 mg/kg = 0.00000
 
 A Horrat Value is the ratio of a proficiency program’s RSD to Horwitz’s predicted value.
 
-![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/horwitz.png)
+![Caption for the picture.](/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/figures/horwitz.png)
 
 ---
 
@@ -286,7 +289,7 @@ Robust statistics are not influenced markedly by outliers or extreme results.  F
 
 Proficiency programs, such as Global Proficiency, use robust statistics because the participation group is often so small.
 
-![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/robust.png)
+![Caption for the picture.](/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/figures/robust.png)
 
 
 ### Outliers
@@ -333,7 +336,7 @@ $$t = \frac{\left(x - \bar{x}\right)}{\frac{sd}{\sqrt n}}$$
 The data:
 
 ```{r, echo=FALSE}
-data.in <- read.csv("/Users/Study Old/Documents/GitHub/Chemistry_Stats/data/Book2.csv", header=TRUE)
+data.in <- read.csv("/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/data/Book2.csv", header=TRUE)
 data.in <- data.in[1:6,]
 
 
@@ -468,7 +471,7 @@ Bootstrapping is where a small dataset is repeatedly resampled (with replacement
 **Assumption:** the small set contains values that are all equally valid.
 
 ```{r, echo=FALSE}
-data.in <- read.csv("/Users/Study Old/Documents/GitHub/Chemistry_Stats/data/Book1.csv", header=TRUE)
+data.in <- read.csv("/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/data/Book1.csv", header=TRUE)
 
 bucket <- rep(NA,10000)
 n <- nrow(data.in)
@@ -558,7 +561,7 @@ Control Charts, as the name suggests, help determine whether a process is under 
 
 Conceptually, they are a 3-D Normal curve.  The majority of points should fall in the middle, evenly across both sides of the middle, with no trending.
 
-![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/cc.png)
+![Caption for the picture.](/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/figures/cc.png)
 
 ### Trending rules
 
@@ -595,7 +598,7 @@ Note: the IRMs should not be run sequentially.  With things like fat and ash it 
 * Where two samples are tested, Bias = average of the two standard differences.
 * Bias alert when bias >0.5
 
-![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/GP_Flowchart.png)
+![Caption for the picture.](/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/figures/GP_Flowchart.png)
 
 Note: GP 'alerts' are based on 95% statistics, so there is a 1/20 change of a random alert.
 * Check for transcription errors
@@ -620,7 +623,7 @@ A typical validation project will consider the following items.  Whether they ar
 
 ### Limit of Detection (LOD) & Limit of Reporting (LOR)
 
-![Caption for the picture.](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/LOR.png)
+![Caption for the picture.](/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/figures/LOR.png)
 
 To assess LOD and LOR it is common to look at the standard deviation near the LOR.  The black curve, above, represents the standard deviation as it brackets the blank.  The red curve is centered 3sd and represents the point where the mean value idf clear of the blank variation but there is still an overlap between the blank and the detection curve.  You may have detected the analyte but quatitationis uncertain.  The blue curve, 10sd, is clear of the other curves and has a realistic likelyhood of quantitation.
 
@@ -691,11 +694,8 @@ TOST equivalence tests were specifically developed to address this issue. In a 2
 
 TOST tests assess whether there is a practical difference in means. You must pick a threshold difference for which smaller differences are considered practically equivalent. The most straightforward test to construct uses two one-sided t-tests from both sides of the difference interval. If both tests reject (or conclude that the difference in the means differs significantly from the threshold), then the groups are not equivalent. 
 
-![If the difference between means
-falls in the blue range, we would 
-conclude the means belong to 
-equivalent groups.
-](/Users/Study Old/Documents/GitHub/Chemistry_Stats/figures/TOST.png)
+![Caption for the picture.](/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/figures/TOST.png)
+
 
 ---
 
