@@ -1,7 +1,7 @@
 ---
 title: "Chemistry Statistics"
 author: "Lee Kennedy"
-date: 'null'
+date: 'COVID-19 Lock Up - March, 2020.'
 output:
   word_document:
     toc: yes
@@ -50,7 +50,7 @@ Descriptive statistics permit you to get an indication of a dataset’s ‘norma
 You can do a summary in base R or use "describe" in the Psych package.
 A quick check for normality may be just comparing the mean and median.  They should be relatively close.
 
-The following two data sets are displayed using the two processes.  A shows good normality but B doesn't.  This can be seen in the ranges and the difference between the mean and the median.  Note also what happens to the means when the top and bottom 10% of data points are removed ("trimmed").  
+The following two data sets are displayed using the two processes.  A shows good normality but B doesn't.  This can be seen in the ranges and the difference between the mean and the median.  Note also what happens to the means when the top and bottom 10% of data points are removed ("trimmed").  Note that 'trimmed' is different to 'Winsorising', see later, as results are removed from the data set.  
 
 ```{r, echo=FALSE}
 library(psych)
@@ -64,7 +64,7 @@ describe(data.in)
 
 ### Q-Q Plot
 
-A Q-Q plot gives an indication of normality.  The previous data is assessed in the following plots.  If normally distributed, the data will lie near the red line.  The first set is normal, the second is not.  The histograms provide a more visual perspective.
+A Q-Q plot gives an indication of normality. The previous data is assessed in the following plots. As we have 20 data points, 20 quantiles are calculated for a normal distribution and plotted against our data. If normally distributed, the data will lie near the red line. The first set is normal, the second is not. The histograms provide a more visual perspective.
 
 ```{r, echo = FALSE}
 par(mfrow = c(2,2))
@@ -98,7 +98,9 @@ Skewness quantifies how symmetrical the distribution is.
 
 ### Kurtosis
 
-Kurtosis characterizes the relative peakedness or flatness of a distribution compared with the normal distribution. 
+Kurtosis characterizes the relative flatness of a distribution compared with the normal distribution. 
+
+The standard measure of a distribution's kurtosis, originating with Karl Pearson, is a scaled version of the fourth moment of the distribution. This number is related to the tails of the distribution, not its peak; hence, the sometimes-seen characterization of kurtosis as "peakedness" is incorrect. For this measure, higher kurtosis corresponds to greater extremity of deviations (or outliers), and not the configuration of data near the mean.
 
 * Different to Excel, which sets a normal curve to a kurtosis of 3.
 * A result less than 0 indicates a curve flatter than a normal distribution.
@@ -109,6 +111,13 @@ Kurtosis characterizes the relative peakedness or flatness of a distribution com
 
 If a distribution is not assessed as normal it may be possible to transform the data to a normal set by, for example, converting by logorithms.
 
+### Shapiro-Wilk Test
+
+The Shapiro–Wilk test tests the null hypothesis that a sample x1, ..., xn came from a normally distributed population. Thus, if the p value is less than the chosen alpha level, then the null hypothesis is rejected and there is evidence that the data tested are not normally distributed. On the other hand, if the p value is greater than the chosen alpha level, then the null hypothesis that the data came from a normally distributed population can not be rejected 
+
+### Winsorising of Data
+
+This is where you make the top and bottom 5% (say) of data the same as the last item of retained data at either end.
 
 ---
 
@@ -220,6 +229,8 @@ Repeatability standard deviation is determined from duplicates and reproducibili
 
 ### Effect Size
 Calculate the effect size by subtracting the control group mean from the final group mean and dividing the result by the standard deviation of the control group.  (Sometimes an arithmetic mean of the two sd’s is used.)  The greater the effect, the greater the impact of the ‘treatment’.  A result near zero indicates no effect.
+
+Cohen defined an effect size of 0.2 as small, 0.5 as medium and 0.8 as large.
 
 ## Hypothesis Testing
 
@@ -374,6 +385,7 @@ Input    | xxx
 The F-test is designed to test if two population variances are equal. It does this by comparing the ratio of two variances. So, if the variances are equal, the ratio of the variances will be 1.
 
 Assumptions / Notes
+
 * The larger variance should always be placed in the numerator 
 * The test statistic is F = s1^2 / s2^2 where s1^2 > s2^2 
 * Divide alpha by 2 for a two tail test and then find the right critical value 
@@ -410,7 +422,7 @@ The wording of a typical statement: "There were no statistically significant dif
 
 An estimate of repeatability standard deviation, sr, is obtained by the square root of the Within Groups Mean Square value. ( sqrt(0.0859)  = 0.293, a variance of 0.0864, cf the three individual variance results).
 
-An estimate of the between group standard deviation is given by
+An estimate of the between group standard deviation (sampling error) is given by
 
 $$s_b = \sqrt(\frac{MS_b-MS_w}{n})$$
 
@@ -430,12 +442,6 @@ If differences across sample means are "large" relative to differences within sa
 The Tukey HSD test assesses the differences between data sets.  The ANOVA table has a p-value of 0.0106 indicating that the means are not all the same but it is Tukey who tells you which ones are different.  
 
 
-An estimate of repeatability standard deviation, sr, is obtained by the square root of the Within Groups Mean Square value. ( sqrt(0.0859)  = 0.293, a variance of 0.0864, cf the three individual variance results).
-
-
-
-
- 
 ## Rounding
 
 The correct level of rounding for an analysis is indicated by the standard deviation of that analysis (2). If need be you can round to a less accurate level that the level indicated by this rule but not to a higher level of accuracy unless it is at the client’s specific request (eg project work).
@@ -516,18 +522,23 @@ Input    | xxx
 
 ## Data Exploration Guidelines
 
-1. Know what you are trying to prove. Correlation?  Differences?
-2. Determine what data you need to collect.
-3. Always plot your data.  Sometimes that is all you need to do for the answer to your question to be obvious.
+1. Start a new project for every job
+2. Know what you are trying to prove. Correlation?  Differences?
+3. Determine what data you need to collect.
+4. Always plot your data.  Sometimes that is all you need to do for the answer to your question to be obvious.
+
 * Regular plots
 * X-Y plots
 * Box Plots
+* Keep your data
+* Keep your scripts
 
 Once you have had a look at your data, decide whether it is complete and whether it needs to be ‘cleaned’.  
 
 Incomplete data may have areas where your feel that more data is needed to present a complete picture.
 
 Cleaning data is not a bad thing and can involve 
+
 * removing blanks, 
 * removing ‘less thans’ (<), 
 * removing text and 
@@ -544,7 +555,7 @@ Tidy Data is easy to work with.
 1.	Each variable you measure should be in one column
 2.	Each different observation of that variable should be in a different row
 3.	There should be one table for each "kind" of variable
-4.	If you have multiple tables, they should include a column in the table that allows them to be linked.
+4.	If you have multiple tables, they should include a key column in the table that allows them to be linked.
 
 ## Proficiency programs
 
@@ -601,6 +612,7 @@ Note: the IRMs should not be run sequentially.  With things like fat and ash it 
 ![Caption for the picture.](/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/figures/GP_Flowchart.png)
 
 Note: GP 'alerts' are based on 95% statistics, so there is a 1/20 change of a random alert.
+
 * Check for transcription errors
 * Check for calculation errors
 * Ask for more sample and retest.
@@ -620,6 +632,17 @@ A typical validation project will consider the following items.  Whether they ar
 * MU
 
 ### Linearity
+
+Plotting the standard curve can give a quick visual indication of suitability. The R2 value is useful parameter but be watchful for extreme points that may anchor the curve. Sometimes a smaller segment of a curve may give a better and more useful fit.
+
+#### Data Assessment using the 'xxx' package
+
+Item  |  Input
+------|---------
+R Script | Linear_Range.R
+Input    | Data file, single labelled column
+
+---
 
 ### Limit of Detection (LOD) & Limit of Reporting (LOR)
 
@@ -664,11 +687,13 @@ A function of the laboratory's precision and the uncertainty of the value for th
 
 Even when no bias appears to exist in a sample, there will be uncertainty as to whether any bias exists. 
 
-The diagram below compares the laboratory value to the ‘Truth’.  The laboratory value has the appropriate uncertainty spread around it, however in reality there is no absolute ‘Truth’.  Both the determined value and the certified “truth” value will have an uncertainty around them.
+The diagram below compares a results (red) to a reference value (blue). Both the determined value and the certified value will have an uncertainty around them and the apparent ‘bias’ is uncertain.
+
+![Caption for the picture.](/Users/DTS_Homedesk/Documents/GitHub/Chemistry_Stats/figures/Bias.png)
 
 
 
-## Expansion Coefficient
+### Expansion Coefficient
 
 Often 2 is used as a default value for k, the expansion coefficent.  While this is adequate for large sample populations (>30), the true value should be used for small sample sizes.
 
